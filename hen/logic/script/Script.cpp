@@ -110,6 +110,14 @@ void hen::script::Script::registerDefaultFunctionality()
 	helper.addConstructor<glm::ivec3(glm::ivec2, int)>("ivec3");
 	helper.addConstructor<glm::ivec3(int, int, int)>("ivec3");
 
+	helper.addType<glm::ivec4>("ivec4");
+	helper.addConstructor<glm::ivec4()>("ivec4");
+	helper.addConstructor<glm::ivec4(glm::ivec4)>("ivec4");
+	helper.addConstructor<glm::ivec4(glm::ivec3, int)>("ivec4");
+	helper.addConstructor<glm::ivec4(glm::ivec2, int, int)>("ivec4");
+	helper.addConstructor<glm::ivec4(glm::ivec2, glm::ivec2)>("ivec4");
+	helper.addConstructor<glm::ivec4(int, int, int, int)>("ivec4");
+
 	helper.addEnum<math::Axis>("Axis", {
 		{ math::Axis::X, "AXIS_X" },
 		{ math::Axis::Y, "AXIS_Y" },
