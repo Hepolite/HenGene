@@ -77,11 +77,11 @@ void hen::render::Camera::setViewDistance(float znear, float zfar)
 glm::vec3 hen::render::Camera::getVector(const glm::vec2& mouseVector) const
 {
 	const glm::vec2 size{ Core::getDisplay().getWidth(), Core::getDisplay().getHeight() };
-	const auto& cameraBlock = Core::getUniformBlockManager().get("Camera");
 
 	// Magic. DO NOT TOUCH!
 	const auto v = 2.0f * mouseVector / size - 1.0f;
-	const auto far = m_projviewInv * glm::vec4{ v.x, -v.y, 1.0f, 1.0f };
-	return glm::normalize(glm::vec3{ far });
+	const auto far = m_projviewInv * glm::vec4{ v.x, -v.y, 0.5f, 1.0f };
+	const auto near = m_projviewInv * glm::vec4{ v.x, -v.y, -0.5f, 1.0f };
+	return glm::normalize(glm::vec3{ far / far.w } - glm::vec3{ near / near.w });
 }
 

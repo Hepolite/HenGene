@@ -14,6 +14,7 @@ namespace hen
 	namespace string
 	{
 		std::string replace_all(const std::string& string, const std::string& sub, const std::string& rep);
+		std::vector<std::string> split(const std::string& string, const char delim);
 
 		int as_int(const std::string& string, int def = 0);
 		float as_float(const std::string& string, float def = 0.0f);

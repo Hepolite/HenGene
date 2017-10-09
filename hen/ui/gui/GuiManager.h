@@ -16,6 +16,9 @@ namespace hen
 			GuiManager& operator=(const GuiManager&) = delete;
 			GuiManager& operator=(GuiManager&&) = delete;
 
+			void onProcess(float dt);
+			void onRender(float dt) const;
+
 		private:
 
 		};

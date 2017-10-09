@@ -131,3 +131,13 @@ std::string hen::string::replace_all(const std::string& string, const std::strin
 	}
 	return newString;
 }
+std::vector<std::string> hen::string::split(const std::string& string, const char delim)
+{
+	std::vector<std::string> elements;
+	std::stringstream stream{ string };
+	std::string item;
+	auto out = std::back_inserter(elements);
+	while (std::getline(stream, item, delim))
+		*(out++) = item;
+	return elements;
+}
