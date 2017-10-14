@@ -41,13 +41,14 @@ namespace hen
 
 		class KeyUnichar
 		{
+		public:
 			KeyUnichar(int unichar, unsigned int modifiers)
 				: m_unichar(unichar), m_modifiers(modifiers)
 			{}
 			~KeyUnichar() = default;
 
 			inline int getUnichar() const { return m_unichar; }
-			unsigned inline int getModifiers() const { return m_modifiers; }
+			inline unsigned int getModifiers() const { return m_modifiers; }
 
 		private:
 			int m_unichar;

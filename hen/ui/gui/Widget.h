@@ -39,8 +39,9 @@ namespace hen
 			void onProcess(float dt);
 			void onRender(const glm::vec2& offset, float dt) const;
 
-			inline void setProcess(std::function<void(Widget&, float)>&& process) { m_process = process; }
-			inline void setRender(std::function<void(const Widget&, const glm::vec2&, float)>&& render) { m_render = render; }
+			inline void setProcess(std::function<void(float)>&& process) { m_process = process; }
+			inline void setRender(std::function<void(const glm::vec2&, float)>&& render) { m_render = render; }
+			inline void setInvoker(std::function<void()>&& invoker) { m_clickable.setInvoker(invoker); }
 
 			inline std::string getName() const { return m_name; }
 			inline GuiResources& getResources() { return *m_data.get<GuiResources*>(""); }
@@ -67,8 +68,8 @@ namespace hen
 			std::string m_name;
 			bool m_visible = true;
 
-			std::function<void(Widget&, float)> m_process;
-			std::function<void(const Widget&, const glm::vec2&, float)> m_render;
+			std::function<void(float)> m_process;
+			std::function<void(const glm::vec2&, float)> m_render;
 		};
 	}
 }

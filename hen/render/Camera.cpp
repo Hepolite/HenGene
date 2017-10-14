@@ -24,7 +24,7 @@ void hen::render::Camera::upload(float dt) const
 	const float fov = math::lerp(m_oldFov, m_fov, dt);
 
 	const glm::vec2 size{ Core::getDisplay().getWidth(), Core::getDisplay().getHeight() };
-	const auto proj = glm::perspective(fov, size.x / size.y, m_znear, m_zfar);
+	const auto proj = glm::perspective(glm::radians(fov), size.x / size.y, m_znear, m_zfar);
 	const auto view = glm::lookAt(pos, pos + math::toCartesian(rot), up);
 	const auto projView = proj * view;
 	m_projviewInv = glm::inverse(projView);

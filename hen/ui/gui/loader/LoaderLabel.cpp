@@ -11,7 +11,7 @@ void hen::gui::LoaderLabel::render(const Widget& widget, const glm::vec2& offset
 
 void hen::gui::LoaderLabel::load(Widget& widget, const pugi::xml_node& node) const
 {
-	widget.setRender(&LoaderLabel::render);
+	//widget.setRender(&LoaderLabel::render);
 
 	loadText(widget, node.child("text"));
 }

@@ -29,7 +29,17 @@ namespace hen
 				return registerCallback(std::make_unique<Callback<Event>>(callback));
 			}
 			template<typename Event>
+			inline Listener registerCallback(std::function<void(Event&)>&& callback)
+			{
+				return registerCallback(std::make_unique<Callback<Event>>(callback));
+			}
+			template<typename Event>
 			inline Listener registerCallback(const Callback<Event>& callback)
+			{
+				return registerCallback(std::make_unique<Callback<Event>>(callback));
+			}
+			template<typename Event>
+			inline Listener registerCallback(Callback<Event>&& callback)
 			{
 				return registerCallback(std::make_unique<Callback<Event>>(callback));
 			}

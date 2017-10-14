@@ -15,11 +15,11 @@ void hen::script::ScriptHelper::applyScriptData()
 		data(*this);
 }
 
-void hen::script::ScriptHelper::info(const std::string& msg)
+void hen::script::ScriptHelper::info(const std::string& msg) const
 {
 	LOG_INFO << msg;
 }
-void hen::script::ScriptHelper::warn(const std::string& msg)
+void hen::script::ScriptHelper::warn(const std::string& msg) const
 {
 	LOG_WARNING << msg;
 }

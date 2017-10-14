@@ -35,3 +35,10 @@ const hen::gui::Widget& hen::gui::GuiResources::getWidget(const std::string& nam
 		throw std::invalid_argument("Widget " + name + " does not exist!");
 	return result->second;
 }
+std::vector<hen::gui::Widget*> hen::gui::GuiResources::getWidgets()
+{
+	std::vector<Widget*> widgets;
+	for (auto& it : m_widgets)
+		widgets.emplace_back(&it.second);
+	return widgets;
+}

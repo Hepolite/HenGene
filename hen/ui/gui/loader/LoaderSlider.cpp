@@ -65,12 +65,10 @@ void hen::gui::LoaderSlider::renderBar(const Widget& widget, const glm::vec2& of
 	const auto& data = button->m_data;
 
 	const std::string state = clickable.isLocked() ? "locked" : clickable.isHovered() || clickable.isClicked() ? "hovered" : "normal";
-	unsigned int frame = bar->getFrameIndex(state);
-	if (frame == -1)
-		frame = 0;
+	unsigned int frame = bar->getFrameIndex(state).value_or(0);
 
-	const auto& cornerFrame = bar->getFrame(frame + 0);
-	const auto& centerFrame = bar->getFrame(frame + 1);
+	const auto& cornerFrame = bar->getFrame(frame + 0).value_or(allegro::Sprite::Frame{});
+	const auto& centerFrame = bar->getFrame(frame + 1).value_or(allegro::Sprite::Frame{});
 	const auto& size = button->m_size.getSize();
 	const auto& sizeCorner = hen::math::min(glm::vec2{ cornerFrame.m_w, cornerFrame.m_h }, 0.5f * size);
 	const auto& sizeCenter = size - 2.0f * sizeCorner;
@@ -100,16 +98,14 @@ void hen::gui::LoaderSlider::renderSlider(const Widget& widget, const glm::vec2&
 	const auto& clickable = button->m_clickable;
 
 	const std::string state = clickable.isLocked() ? "locked" : clickable.isHovered() || clickable.isClicked() ? "hovered" : "normal";
-	unsigned int frame = slider->getFrameIndex(state);
-	if (frame == -1)
-		frame = 0;
+	unsigned int frame = slider->getFrameIndex(state).value_or(0);
 
 	const auto value = widget.m_data.get<float>(DATA_VALUE);
 	const auto middle = widget.m_data.get<float>(DATA_MIDDLE);
 	const auto limit = widget.m_data.get<glm::vec2>(DATA_LIMIT);
 	const auto ratio = 0.5f * (value < middle ? (value - limit.x) / (middle - limit.x) : 2.0f - (limit.y - value) / (limit.y - middle));
 
-	const auto& size = button->m_size.getSize() - slider->getFrame(frame).m_w;
+	const auto& size = button->m_size.getSize() - slider->getFrame(frame).value_or(allegro::Sprite::Frame{}).m_w;
 	const auto& pos = button->m_pos.getPos() + offset;
 	slider->render(frame, pos.x + ratio * size.x, pos.y);
 }
@@ -137,8 +133,8 @@ float hen::gui::LoaderSlider::getValue(const Widget & widget)
 
 void hen::gui::LoaderSlider::load(Widget& widget, const pugi::xml_node& node) const
 {
-	widget.setProcess(&LoaderSlider::process);
-	widget.setRender(&LoaderSlider::render);
+	//widget.setProcess(&LoaderSlider::process);
+	//widget.setRender(&LoaderSlider::render);
 
 	widget.m_size.setMaxSize(widget.m_size.getMinSize());
 
@@ -161,10 +157,9 @@ void hen::gui::LoaderSlider::loadButtons(Widget& widget, const pugi::xml_node& n
 	auto& buttonIncrease = resources.createWidget(widget.getName() + "_INCREASE", &widget);
 	auto& buttonBar = resources.createWidget(widget.getName() + "_BAR", &widget);
 
-	LoaderButton loader;
-	loader.load(buttonDecrease, pugi::xml_node{});
-	loader.load(buttonIncrease, pugi::xml_node{});
-	loader.load(buttonBar, pugi::xml_node{});
+	LoaderButton{ buttonDecrease }.load(pugi::xml_node{});
+	LoaderButton{ buttonIncrease }.load(pugi::xml_node{});
+	LoaderButton{ buttonBar }.load(pugi::xml_node{});
 	loadButtonChange(widget, buttonDecrease, node, false);
 	loadButtonChange(widget, buttonIncrease, node, true);
 	loadButtonBar(widget, buttonBar, node);
@@ -203,7 +198,7 @@ void hen::gui::LoaderSlider::loadButtonBar(const Widget& widget, Widget& button,
 		button.m_size.setMinSize(glm::vec2{ size.x - 2.0f * size.y, size.y });
 	else
 		button.m_size.setMinSize(glm::vec2{ size.x, size.y - 2.0f * size.x });
-	button.setRender([](const hen::gui::Widget&, const glm::vec2&, float) {});
+	//button.setRender([](const hen::gui::Widget&, const glm::vec2&, float) {});
 }
 void hen::gui::LoaderSlider::loadCallback(Widget& widget) const
 {

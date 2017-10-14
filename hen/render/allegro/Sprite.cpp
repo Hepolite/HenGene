@@ -89,14 +89,18 @@ unsigned int hen::allegro::Sprite::addFrameGrid(float x, float y, float width, f
 	return index;
 }
 
-hen::allegro::Sprite::Frame hen::allegro::Sprite::getFrame(unsigned int index) const
+std::optional<hen::allegro::Sprite::Frame> hen::allegro::Sprite::getFrame(unsigned int index) const
 {
-	return index >= getFrameCount() ? Frame{ 0.0f, 0.0f, 0.0f, 0.0f } : m_frames[index];
+	if (index >= getFrameCount())
+		return {};
+	return m_frames[index];
 }
-unsigned int hen::allegro::Sprite::getFrameIndex(const std::string& name) const
+std::optional<unsigned int> hen::allegro::Sprite::getFrameIndex(const std::string& name) const
 {
 	const auto& result = m_frameNames.find(name);
-	return result == m_frameNames.end() ? -1 : result->second;
+	if (result == m_frameNames.end())
+		return {};
+	return result->second;
 }
 void hen::allegro::Sprite::render(float x, float y, int flags) const
 {

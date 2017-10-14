@@ -1,11 +1,9 @@
 
 #pragma once
 
-#include "hen/io/File.h"
 #include "hen/ui/gui/Widget.h"
 
-#include <extern/pugixml/pugixml.hpp>
-#include <glm/vec2.hpp>
+#include "extern/pugixml/pugixml.hpp"
 
 namespace hen
 {
@@ -14,32 +12,39 @@ namespace hen
 		class LoaderButton
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderButton() = delete;
+			LoaderButton(Widget& widget) : m_widget(widget) {}
+
+			void load(const pugi::xml_node& node);
 
 		private:
-			void loadClickable(Widget& widget, const pugi::xml_node& node) const;
-			void setupMouseEvent(Widget& widget) const;
+			void loadClickable(const pugi::xml_node& node);
 
-			static void render(const Widget& widget, const glm::vec2& offset, float dt);
-			static void renderIcon(const Widget& widget, const glm::vec2& offset);
+			Widget& m_widget;
 		};
 
-		class LoaderButtonCheckbox : public LoaderButton
+		class LoaderButtonCheckbox
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderButtonCheckbox() = delete;
+			LoaderButtonCheckbox(Widget& widget) : m_widget(widget) {}
+
+			void load(const pugi::xml_node& node);
 
 		private:
-			void loadClickable(Widget& widget, const pugi::xml_node& node) const;
+			Widget& m_widget;
 		};
 
-		class LoaderButtonRadio : public LoaderButton
+		class LoaderButtonRadio
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderButtonRadio() = delete;
+			LoaderButtonRadio(Widget& widget) : m_widget(widget) {}
+
+			void load(const pugi::xml_node& node);
 
 		private:
-			void loadClickable(Widget& widget, const pugi::xml_node& node) const;
+			Widget& m_widget;
 		};
 	}
 }

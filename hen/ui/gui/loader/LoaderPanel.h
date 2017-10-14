@@ -14,11 +14,13 @@ namespace hen
 		class LoaderPanel
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderPanel() = delete;
+			LoaderPanel(Widget& widget) : m_widget(widget) {}
+
+			void load(const pugi::xml_node& node) const;
 
 		private:
-			static void render(const Widget& widget, const glm::vec2& offset, float dt);
-			static void renderBackground(const Widget& widget, const glm::vec2& offset);
+			Widget& m_widget;
 		};
 	}
 }

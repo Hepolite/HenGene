@@ -52,8 +52,8 @@ void hen::gui::LoaderWindow::load(Widget& widget, const pugi::xml_node& node) co
 	const auto& size = glm::ivec2{ widget.m_size.getSize() };
 	widget.m_asset.createSprite(size.x, size.y, "window");
 
-	widget.setProcess(&LoaderWindow::process);
-	widget.setRender(&LoaderWindow::render);
+	//widget.setProcess(&LoaderWindow::process);
+	//widget.setRender(&LoaderWindow::render);
 
 	loadSliders(widget);
 }

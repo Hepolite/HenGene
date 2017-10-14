@@ -4,134 +4,41 @@
 #include "hen/core/Core.h"
 #include "hen/event/EventBus.h"
 #include "hen/event/events/Mouse.h"
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/Constants.h"
+#include "hen/ui/gui/processors/ProcessorButton.h"
 
-
-void hen::gui::LoaderButton::render(const Widget& widget, const glm::vec2& offset, float dt)
+void hen::gui::LoaderButton::load(const pugi::xml_node& node)
 {
-	renderIcon(widget, offset);
+	ProcessorButton processor{ m_widget };
+	m_widget.setInvoker(processor);
+	m_widget.setRender(processor);
+
+	m_widget.m_listener.add(Core::getEventBus().registerCallback<events::MouseMove>(processor));
+	m_widget.m_listener.add(Core::getEventBus().registerCallback<events::MousePress>(processor));
+	m_widget.m_listener.add(Core::getEventBus().registerCallback<events::MouseRelease>(processor));
+
+	if (const auto childNode = node.child(COMPONENT_CLICKABLE))
+		loadClickable(childNode);
 }
-void hen::gui::LoaderButton::renderIcon(const Widget& widget, const glm::vec2& offset)
+void hen::gui::LoaderButton::loadClickable(const pugi::xml_node& node)
 {
-	const auto& icon = widget.m_asset.getSprite("icon");
-	if (icon == nullptr)
-		return;
-	const auto& clickable = widget.m_clickable;
-	const auto& data = widget.m_data;
+	const auto attrInverted = node.attribute(ATTRIBUTE_CLICKABLE_INVERTED).as_bool();
 
-	const std::string state = clickable.isLocked() ? "locked" : clickable.isHovered() || clickable.isClicked() ? "hovered" : "normal";
-	const std::string active = data.get<bool>("active") ? "active" : "inactive";
-	unsigned int frame = icon->getFrameIndex(active + "_" + state);
-	if (frame == -1)
-		frame = icon->getFrameIndex(state);
-	if (frame == -1)
-		frame = 0;
-
-	const auto& pos = widget.m_pos.getPos() + offset;
-	const auto& size = widget.m_size.getSize();
-	icon->render(frame, pos.x, pos.y, size.x, size.y);
+	m_widget.m_data.set(DATA_INVERTED, attrInverted);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void hen::gui::LoaderButton::load(Widget& widget, const pugi::xml_node& node) const
+void hen::gui::LoaderButtonCheckbox::load(const pugi::xml_node& node)
 {
-	widget.setRender(&LoaderButton::render);
-
-	loadClickable(widget, node.child("clickable"));
-	widget.m_data.set("inverted", node.child("clickable").attribute("inverted").as_bool());
-
-	setupMouseEvent(widget);
-}
-void hen::gui::LoaderButton::loadClickable(Widget& widget, const pugi::xml_node& node) const
-{
-	widget.m_clickable.setInvoker([&]()
-	{
-		const bool inverted = widget.m_data.get<bool>("inverted");
-		const auto& script = widget.m_script.get("click");
-		if (!script.empty())
-			widget.getResources().getScript().executeScript(script + "()");
-	});
+	LoaderButton{ m_widget }.load(node);
+	
+	ProcessorButtonCheckbox processor{ m_widget };
+	m_widget.setInvoker(processor);
 }
 
-void hen::gui::LoaderButton::setupMouseEvent(Widget& widget) const
+void hen::gui::LoaderButtonRadio::load(const pugi::xml_node& node)
 {
-	auto& listener = widget.m_listener;
-
-	listener.add(Core::getEventBus().registerCallback<events::MouseMove>([&](events::MouseMove& event)
-	{
-		const auto& bbox = (event.getScreenPos() - widget.m_pos.getPos()) / widget.m_size.getSize();
-		widget.m_clickable.setHovered(widget.isVisible() && bbox.x >= 0.0f && bbox.x < 1.0f && bbox.y >= 0.0f && bbox.y < 1.0f);
-	}));
-	listener.add(Core::getEventBus().registerCallback<events::MousePress>([&](events::MousePress& event)
-	{
-		auto& clickable = widget.m_clickable;
-		clickable.setClicked(widget.isVisible() && !clickable.isLocked() && clickable.isHovered());
-	}));
-	listener.add(Core::getEventBus().registerCallback<events::MouseRelease>([&](events::MouseRelease& event)
-	{
-		auto& clickable = widget.m_clickable;
-		if (widget.isVisible() && !clickable.isLocked() && clickable.isClicked() && clickable.isHovered())
-			clickable.invoke();
-		clickable.setClicked(false);
-	}));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void hen::gui::LoaderButtonCheckbox::load(Widget& widget, const pugi::xml_node& node) const
-{
-	LoaderButton loader;
-	loader.load(widget, node);
-	loadClickable(widget, node);
-}
-void hen::gui::LoaderButtonCheckbox::loadClickable(Widget& widget, const pugi::xml_node& node) const
-{
-	widget.m_clickable.setInvoker([&]()
-	{
-		bool active = !widget.m_data.get<bool>("active");
-		widget.m_data.set("active", active);
-
-		const bool inverted = widget.m_data.get<bool>("inverted");
-		const auto& script = widget.m_script.get("click");
-		if (!script.empty())
-			widget.getResources().getScript().executeScript(script + (active != inverted ? "(true)" : "(false)"));
-	});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void hen::gui::LoaderButtonRadio::load(Widget& widget, const pugi::xml_node& node) const
-{
-	LoaderButton loader;
-	loader.load(widget, node);
-	loadClickable(widget, node);
-}
-void hen::gui::LoaderButtonRadio::loadClickable(Widget& widget, const pugi::xml_node& node) const
-{
-	widget.m_clickable.setInvoker([&]()
-	{
-		for (auto& member : widget.m_group.getMembers())
-		{
-			bool active = member->m_data.get<bool>("active");
-			if (!active || member == &widget)
-				continue;
-
-			member->m_data.set("active", false);
-			const bool inverted = member->m_data.get<bool>("inverted");
-			const auto& script = member->m_script.get("click");
-			if (!script.empty())
-				widget.getResources().getScript().executeScript(script + (inverted ? "(true)" : "(false)"));
-		}
-
-		bool active = widget.m_data.get<bool>("active");
-		if (!active)
-		{
-			widget.m_data.set("active", true);
-			const bool inverted = widget.m_data.get<bool>("inverted");
-			const auto& script = widget.m_script.get("click");
-			if (!script.empty())
-				widget.getResources().getScript().executeScript(script + (inverted ? "(false)" : "(true)"));
-		}
-	});
+	LoaderButton{ m_widget }.load(node);
+	
+	ProcessorButtonRadio processor{ m_widget };
+	m_widget.setInvoker(processor);
 }

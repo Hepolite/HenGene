@@ -42,7 +42,7 @@ void hen::event::EventQueue::process() const
 			bus.post(events::KeyRelease{ event.keyboard.keycode, event.keyboard.modifiers });
 			break;
 		case ALLEGRO_EVENT_KEY_CHAR:
-			bus.post(events::KeyRelease{ event.keyboard.unichar, event.keyboard.modifiers });
+			bus.post(events::KeyUnichar{ event.keyboard.unichar, event.keyboard.modifiers });
 			break;
 
 		case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY:
