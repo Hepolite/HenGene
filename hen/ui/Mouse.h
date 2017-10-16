@@ -39,6 +39,12 @@ namespace hen
 
 			void setPos(const glm::ivec2& pos) const;
 
+			bool consumeHeld(unsigned int button);
+			bool consumePressed(unsigned int button);
+			bool consumeReleased(unsigned int button);
+			glm::vec2 consumeDeltaPos();
+			float consumeDeltaScroll();
+
 		private:
 			event::Listener m_move;
 			event::Listener m_press;

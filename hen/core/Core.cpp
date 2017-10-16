@@ -37,8 +37,8 @@ public:
 	ui::Keyboard m_keyboard;
 	ui::Mouse m_mouse;
 	asset::AssetManager m_assetManager;
-	state::StateManager m_stateManager;
 	gui::GuiManager m_guiManager;
+	state::StateManager m_stateManager;
 };
 
 hen::Core::Internal* hen::Core::m_internal = nullptr;
@@ -97,6 +97,10 @@ hen::Core::Core(const core::Settings& settings)
 	helper.add<hen::shader::ShaderProgram>("data/shaders", "xml", "data/shaders/");
 	LOG_INFO << "Done registering core assets!";
 
+	LOG_INFO << "Registering GUI logic...";
+	m_internal->m_guiManager.initialize();
+	LOG_INFO << "Done setting up GUI logic...";
+
 	LOG_INFO << "Finished setting up core resources!";
 }
 hen::Core::~Core()
@@ -120,7 +124,7 @@ hen::gui::GuiManager& hen::Core::getGuiManager()
 {
 	return m_internal->m_guiManager;
 }
-const hen::logic::Loop& hen::Core::getMainLoop()
+hen::logic::Loop& hen::Core::getMainLoop()
 {
 	return m_internal->m_loop;
 }
@@ -136,11 +140,11 @@ hen::ui::Display& hen::Core::getDisplay()
 {
 	return m_internal->m_display;
 }
-const hen::ui::Keyboard& hen::Core::getKeyboard()
+hen::ui::Keyboard& hen::Core::getKeyboard()
 {
 	return m_internal->m_keyboard;
 }
-const hen::ui::Mouse& hen::Core::getMouse()
+hen::ui::Mouse& hen::Core::getMouse()
 {
 	return m_internal->m_mouse;
 }
@@ -165,6 +169,7 @@ void hen::Core::process(float dt)
 	m_internal->m_keyboard.process();
 	m_internal->m_mouse.process();
 	m_internal->m_eventQueue.process();
+	m_internal->m_guiManager.process(dt);
 	m_internal->m_stateManager.process(dt);
 	m_internal->m_renderCore.process(dt);
 }

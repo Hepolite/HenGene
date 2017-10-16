@@ -27,12 +27,12 @@ namespace hen
 		static event::EventBus& getEventBus();
 		static event::EventQueue& getEventQueue();
 		static gui::GuiManager& getGuiManager();
-		static const logic::Loop& getMainLoop();
+		static logic::Loop& getMainLoop();
 		static render::RenderCore& getRenderCore();
 		static state::StateManager& getStateManager();
 		static ui::Display& getDisplay();
-		static const ui::Keyboard& getKeyboard();
-		static const ui::Mouse& getMouse();
+		static ui::Keyboard& getKeyboard();
+		static ui::Mouse& getMouse();
 		static uniform::UniformBlockManager& getUniformBlockManager();
 
 		void run();

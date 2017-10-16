@@ -1,8 +1,10 @@
 
 #include "hen/ui/gui/processors/ProcessorButton.h"
 
+#include "hen/core/Core.h"
 #include "hen/ui/gui/Constants.h"
 #include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/Mouse.h"
 
 namespace
 {
@@ -22,6 +24,12 @@ void hen::gui::ProcessorButton::operator()()
 	if (!script.empty())
 		m_widget.getResources().getScript().executeScript(script + getScriptArgument());
 }
+void hen::gui::ProcessorButton::operator()(float dt)
+{
+	handleMouseMove();
+	handleMousePress();
+	handleMouseRelease();
+}
 void hen::gui::ProcessorButton::operator()(const glm::vec2& offset, float dt) const
 {
 	const auto& icon = m_widget.m_asset.getSprite(SPRITE_ICON);
@@ -33,27 +41,38 @@ void hen::gui::ProcessorButton::operator()(const glm::vec2& offset, float dt) co
 	if (!frame)
 		frame = icon->getFrameIndex(getIconClickState());
 
-	const auto& pos = m_widget.m_pos.getPos() + offset;
-	const auto& size = m_widget.m_size.getSize();
-	icon->render(frame.value_or(0), pos.x, pos.y, size.x, size.y);
+	const auto pos = m_widget.m_pos.getPos() + offset;
+	const auto size = m_widget.m_size.getSize();
+	const auto rotation = m_widget.m_data.get<float>(DATA_RENDER_ROTATION);
+	const auto flags = data.get<int>(DATA_RENDER_FLAGS);
+	icon->render(frame.value_or(0), pos.x, pos.y, size.x, size.y, rotation, flags);
 }
 
-void hen::gui::ProcessorButton::operator()(events::MouseMove& event)
+void hen::gui::ProcessorButton::handleMouseMove()
 {
-	const auto bbox = (event.getScreenPos() - m_widget.m_pos.getPos()) / m_widget.m_size.getSize();
+	const auto bbox = (Core::getMouse().getPos() - m_widget.m_pos.getPos()) / m_widget.m_size.getSize();
 	m_widget.m_clickable.setHovered(m_widget.isVisible() && bbox.x >= 0.0f && bbox.x < 1.0f && bbox.y >= 0.0f && bbox.y < 1.0f);
 }
-void hen::gui::ProcessorButton::operator()(events::MousePress& event)
+void hen::gui::ProcessorButton::handleMousePress()
 {
 	auto& clickable = m_widget.m_clickable;
-	clickable.setClicked(m_widget.isVisible() && !clickable.isLocked() && clickable.isHovered());
+	if ((m_widget.isVisible() && !clickable.isLocked() && clickable.isHovered()))
+	{
+		if (Core::getMouse().consumePressed(MOUSE_LEFT))
+			clickable.setClicked(true);
+	}
 }
-void hen::gui::ProcessorButton::operator()(events::MouseRelease& event)
+void hen::gui::ProcessorButton::handleMouseRelease()
 {
 	auto& clickable = m_widget.m_clickable;
-	if (m_widget.isVisible() && !clickable.isLocked() && clickable.isClicked() && clickable.isHovered())
-		clickable.invoke();
-	clickable.setClicked(false);
+	if (m_widget.isVisible() && !clickable.isLocked() && clickable.isHovered() && clickable.isClicked())
+	{
+		if (Core::getMouse().consumeReleased(MOUSE_LEFT))
+		{
+			clickable.invoke();
+			clickable.setClicked(false);
+		}
+	}
 }
 
 std::string hen::gui::ProcessorButton::getIconState() const

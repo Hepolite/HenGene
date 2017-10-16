@@ -14,23 +14,21 @@ namespace hen
 		class LoaderSlider
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderSlider() = delete;
+			LoaderSlider(Widget& widget) : m_widget(widget) {}
 
-			static void setLimit(Widget& widget, const glm::vec2& limit, float middle);
-			static void setValue(Widget& widget, float value);
-			static float getValue(const Widget& widget);
+			void load(const pugi::xml_node& node);
 
 		private:
-			void loadData(Widget& widget, const pugi::xml_node& node) const;
-			void loadButtons(Widget& widget, const pugi::xml_node& node) const;
-			void loadButtonChange(Widget& widget, Widget& button, const pugi::xml_node& node, bool increase) const;
-			void loadButtonBar(const Widget& widget, Widget& button, const pugi::xml_node& node) const;
-			void loadCallback(Widget& widget) const;
+			void loadData(const pugi::xml_node& node);
 
-			static void process(Widget& widget, float dt);
-			static void render(const Widget& widget, const glm::vec2& offset, float dt);
-			static void renderBar(const Widget& widget, const glm::vec2& offset);
-			static void renderSlider(const Widget& widget, const glm::vec2& offset);
+			void createChildren();
+			void loadChildButton(Widget& child, bool incrementer) const;
+			void loadChildBar(Widget& child) const;
+
+			void limitSize();
+
+			Widget& m_widget;
 		};
 	}
 }

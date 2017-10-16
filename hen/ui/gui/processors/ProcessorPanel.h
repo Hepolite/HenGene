@@ -3,6 +3,8 @@
 
 #include "hen/ui/gui/Widget.h"
 
+#include <glm/vec2.hpp>
+
 namespace hen
 {
 	namespace gui

@@ -34,16 +34,16 @@ void hen::gui::Loader::load(const pugi::xml_node& node, const std::string& type)
 		LoaderButton{ m_widget }.load(node);
 	else if (type == TYPE_CHECKBOX)
 		LoaderButtonCheckbox{ m_widget }.load( node);
-	else if (type == TYPE_RADIO)
-		LoaderButtonRadio{ m_widget }.load(node);
 	else if (type == TYPE_LABEL)
-		LoaderLabel{}.load(m_widget, node);
+		LoaderLabel{ m_widget }.load(node);
 	else if (type == TYPE_PANEL)
 		LoaderPanel{ m_widget }.load(node);
+	else if (type == TYPE_RADIO)
+		LoaderButtonRadio{ m_widget }.load(node);
 	else if (type == TYPE_TEXTFIELD)
 		LoaderTextfield{}.load(m_widget, node);
 	else if (type == TYPE_SLIDER)
-		LoaderSlider{}.load(m_widget, node);
+		LoaderSlider{ m_widget }.load(node);
 	else if (type == TYPE_WINDOW)
 		LoaderWindow{}.load(m_widget, node);
 	else

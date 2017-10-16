@@ -17,13 +17,14 @@ namespace hen
 			ProcessorButton(Widget& widget) : m_widget(widget) {}
 
 			void operator()();
+			void operator()(float dt);
 			void operator()(const glm::vec2& offset, float dt) const;
 
-			void operator()(events::MouseMove& event);
-			void operator()(events::MousePress& event);
-			void operator()(events::MouseRelease& event);
-			
 		private:
+			void handleMouseMove();
+			void handleMousePress();
+			void handleMouseRelease();
+
 			std::string getIconState() const;
 			std::string getIconClickState() const;
 			std::string getIconActiveState() const;

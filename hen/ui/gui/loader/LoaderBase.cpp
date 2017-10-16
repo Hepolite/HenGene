@@ -89,9 +89,9 @@ void hen::gui::LoaderBase::loadGroup(const pugi::xml_node& node)
 }
 void hen::gui::LoaderBase::loadLink(const pugi::xml_node& node)
 {
-	const std::string attrTarget = node.attribute(ATTRIBUTE_LINK_TARGET).as_string(LINK_PARENT);
+	const std::string attrTarget = node.attribute(ATTRIBUTE_LINK_TARGET).as_string(LINK_PARENT.c_str());
 	const std::string attrLocation = node.attribute(ATTRIBUTE_LINK_LOCATION).as_string(
-		attrTarget == LINK_PARENT ? LINK_TOP_LEFT : LINK_RIGHT_TOP
+		(attrTarget == LINK_PARENT ? LINK_TOP_LEFT : LINK_RIGHT_TOP).c_str()
 	);
 
 	const auto& resources = m_widget.getResources();

@@ -17,8 +17,8 @@ namespace hen
 		public:
 			Widget& createWidget(const std::string& name, Widget* parent);
 			Widget& getWidget(const std::string& name = "");
-			bool hasWidget(const std::string& name = "") const;
 			const Widget& getWidget(const std::string& name = "") const;
+			bool hasWidget(const std::string& name = "") const;
 			std::vector<Widget*> getWidgets();
 			
 			inline script::Script& getScript() { return m_script; }

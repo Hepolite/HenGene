@@ -2,7 +2,6 @@
 #pragma once
 
 #include "hen/io/File.h"
-#include "hen/render/Renderer.h"
 #include "hen/ui/gui/GuiResources.h"
 
 namespace hen
@@ -32,7 +31,6 @@ namespace hen
 
 		private:
 			GuiResources m_resources;
-			render::Renderer m_renderer;
 		};
 	}
 }

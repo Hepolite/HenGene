@@ -14,14 +14,15 @@ namespace hen
 		class LoaderLabel
 		{
 		public:
-			void load(Widget& widget, const pugi::xml_node& node) const;
+			LoaderLabel() = delete;
+			LoaderLabel(Widget& widget) : m_widget(widget) {}
 
-			static void setText(Widget& widget, const render::Text& text);
+			void load(const pugi::xml_node& node) const;
 
 		private:
-			void loadText(Widget& widget, const pugi::xml_node& node) const;
+			void loadText(const pugi::xml_node& node) const;
 
-			static void render(const Widget& widget, const glm::vec2& offset, float dt);
+			Widget& m_widget;
 		};
 	}
 }

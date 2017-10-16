@@ -1,49 +1,47 @@
 
 #include "hen/ui/gui/loader/LoaderLabel.h"
 
-void hen::gui::LoaderLabel::render(const Widget& widget, const glm::vec2& offset, float dt)
+#include "hen/ui/gui/Constants.h"
+#include "hen/ui/gui/processors/ProcessorLabel.h"
+
+#include <Log.h>
+
+void hen::gui::LoaderLabel::load(const pugi::xml_node& node) const
 {
-	const auto pos = widget.m_pos.getPos();
-	widget.m_data.get<render::Text>("text", render::Text{}).render(pos + offset);
+	ProcessorLabel processor{ m_widget };
+	m_widget.setRender(processor);
+
+	loadText(node.child("text"));
 }
-
-//////////////////////////////////////////////////////////////////////////
-
-void hen::gui::LoaderLabel::load(Widget& widget, const pugi::xml_node& node) const
+void hen::gui::LoaderLabel::loadText(const pugi::xml_node& node) const
 {
-	//widget.setRender(&LoaderLabel::render);
+	const std::string attrAlign = node.attribute(ATTRIBUTE_TEXT_ALIGN).as_string(TEXT_ALIGN_LEFT.c_str());
+	const std::string attrFont = node.attribute(ATTRIBUTE_TEXT_FONT).as_string();
+	const std::string attrText = node.child_value();
+	const auto attrHeight = node.attribute(ATTRIBUTE_TEXT_HEIGHT).as_float();
+	const auto attrWidth = node.attribute(ATTRIBUTE_TEXT_WIDTH).as_float();
 
-	loadText(widget, node.child("text"));
-}
-void hen::gui::LoaderLabel::loadText(Widget& widget, const pugi::xml_node& node) const
-{
 	render::Text text;
 
-	if (const auto& attribute = node.attribute("font"))
-		text.setFont(widget.m_asset.addFont(attribute.as_string()));
-	if (const auto& attribute = node.attribute("align"))
-	{
-		const std::string alignment = attribute.as_string("left");
-		if (alignment == "left")
-			text.setAlign(render::Text::Align::LEFT);
-		else if (alignment == "center")
-			text.setAlign(render::Text::Align::CENTER);
-		else if (alignment == "right")
-			text.setAlign(render::Text::Align::RIGHT);
-	}
-	if (const auto& attribute = node.attribute("height"))
-		text.setLineHeight(attribute.as_float());
-	if (const auto& attribute = node.attribute("width"))
-		text.setMaxWidth(attribute.as_float());
+	if (!attrFont.empty())
+		text.setFont(m_widget.m_asset.addFont(attrFont));
+	
+	if (attrAlign == "left")
+		text.setAlign(render::Text::Align::LEFT);
+	else if (attrAlign == "center")
+		text.setAlign(render::Text::Align::CENTER);
+	else if (attrAlign == "right")
+		text.setAlign(render::Text::Align::RIGHT);
+	else
+		LOG_WARNING << "Unknown text aligment in widget " << m_widget.getName();
+	
+	if (attrHeight != 0.0f)
+		text.setLineHeight(attrHeight);
+	if (attrWidth != 0.0f)
+		text.setMaxWidth(attrWidth);
 
-	text.setText(node.child_value());
-	setText(widget, text);
-}
+	text.setText(attrText);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void hen::gui::LoaderLabel::setText(Widget& widget, const render::Text& text)
-{
-	widget.m_data.set<render::Text>("text", text);
-	widget.m_size.setMinSize(text.getSize());
+	m_widget.m_data.set<render::Text>("text", text);
+	m_widget.m_size.setMinSize(text.getSize());
 }

@@ -46,3 +46,37 @@ void hen::ui::Mouse::setPos(const glm::ivec2& pos) const
 {
 	al_set_mouse_xy(hen::Core::getDisplay().getHandle(), pos.x, pos.y);
 }
+
+bool hen::ui::Mouse::consumeHeld(unsigned int button)
+{
+	if (!isHeld(button))
+		return false;
+	m_held.erase(button);
+	return true;
+}
+bool hen::ui::Mouse::consumePressed(unsigned int button)
+{
+	if (!isPressed(button))
+		return false;
+	m_pressed.erase(button);
+	return true;
+}
+bool hen::ui::Mouse::consumeReleased(unsigned int button)
+{
+	if (!isReleased(button))
+		return false;
+	m_released.erase(button);
+	return true;
+}
+glm::vec2 hen::ui::Mouse::consumeDeltaPos()
+{
+	const glm::vec2 result{ m_delta };
+	m_delta.x = m_delta.y = 0.0f;
+	return result;
+}
+float hen::ui::Mouse::consumeDeltaScroll()
+{
+	const float result = m_delta.z;
+	m_delta.z = 0.0f;
+	return result;
+}
