@@ -12,6 +12,7 @@ namespace hen
 		constexpr char* TYPE_PANEL = "panel";
 		constexpr char* TYPE_RADIO = "radio";
 		constexpr char* TYPE_SLIDER = "slider";
+		constexpr char* TYPE_TEXTBOX = "textbox";
 		constexpr char* TYPE_TEXTFIELD = "textfield";
 		constexpr char* TYPE_WINDOW = "window";
 
@@ -25,6 +26,7 @@ namespace hen
 		constexpr char* COMPONENT_SCRIPT = "script";
 		constexpr char* COMPONENT_SIZE = "size";
 		constexpr char* COMPONENT_SPRITE = "sprite";
+		constexpr char* COMPONENT_TEXT = "text";
 		constexpr char* COMPONENT_WIDGET = "widget";
 
 		// Component attributes

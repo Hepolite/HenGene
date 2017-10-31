@@ -11,7 +11,7 @@ void hen::gui::LoaderLabel::load(const pugi::xml_node& node) const
 	ProcessorLabel processor{ m_widget };
 	m_widget.setRender(processor);
 
-	loadText(node.child("text"));
+	loadText(node.child(COMPONENT_TEXT));
 }
 void hen::gui::LoaderLabel::loadText(const pugi::xml_node& node) const
 {
@@ -26,14 +26,14 @@ void hen::gui::LoaderLabel::loadText(const pugi::xml_node& node) const
 	if (!attrFont.empty())
 		text.setFont(m_widget.m_asset.addFont(attrFont));
 	
-	if (attrAlign == "left")
+	if (attrAlign == TEXT_ALIGN_LEFT)
 		text.setAlign(render::Text::Align::LEFT);
-	else if (attrAlign == "center")
+	else if (attrAlign == TEXT_ALIGN_CENTER)
 		text.setAlign(render::Text::Align::CENTER);
-	else if (attrAlign == "right")
+	else if (attrAlign == TEXT_ALIGN_RIGHT)
 		text.setAlign(render::Text::Align::RIGHT);
 	else
-		LOG_WARNING << "Unknown text aligment in widget " << m_widget.getName();
+		LOG_WARNING << "Unknown text aligment " << attrAlign << " in widget " << m_widget.getName();
 	
 	if (attrHeight != 0.0f)
 		text.setLineHeight(attrHeight);
@@ -42,6 +42,6 @@ void hen::gui::LoaderLabel::loadText(const pugi::xml_node& node) const
 
 	text.setText(attrText);
 
-	m_widget.m_data.set<render::Text>("text", text);
+	m_widget.m_data.set(DATA_TEXT, text);
 	m_widget.m_size.setMinSize(text.getSize());
 }

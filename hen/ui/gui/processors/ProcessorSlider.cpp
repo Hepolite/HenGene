@@ -30,7 +30,6 @@ void hen::gui::ProcessorSlider::operator()(float dt)
 }
 void hen::gui::ProcessorSlider::operator()(const glm::vec2& offset, float dt) const
 {
-	renderChildren(offset, dt);
 	renderBar(offset, dt);
 	renderSlider(offset, dt);
 }
@@ -61,11 +60,6 @@ void hen::gui::ProcessorSlider::processSlider(float dt)
 		setValue(hen::math::lerp(middle, limit.y, 2.0f * ratio - 1.0f));
 }
 
-void hen::gui::ProcessorSlider::renderChildren(const glm::vec2& offset, float dt) const
-{
-	for (const auto& child : m_widget.m_family.getChildren())
-		child->onRender(offset, dt);
-}
 void hen::gui::ProcessorSlider::renderBar(const glm::vec2& offset, float dt) const
 {
 	const auto& bar = m_widget.m_asset.getSprite("bar");

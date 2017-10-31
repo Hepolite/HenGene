@@ -14,7 +14,7 @@ namespace hen
 		public:
 			virtual ~GuiFile() = default;
 
-			void load(const std::string& filepath);
+			
 		};
 	}
 }

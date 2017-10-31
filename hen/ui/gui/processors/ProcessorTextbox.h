@@ -9,17 +9,15 @@ namespace hen
 {
 	namespace gui
 	{
-		class ProcessorPanel
+		class ProcessorTextbox
 		{
 		public:
-			ProcessorPanel() = delete;
-			ProcessorPanel(Widget& widget) : m_widget(widget) {}
+			ProcessorTextbox() = delete;
+			ProcessorTextbox(Widget& widget) : m_widget(widget) {}
 
 			void operator()(const glm::vec2& offset, float dt) const;
 
 		private:
-			void renderBackground(const glm::vec2& offset, float dt) const;
-			
 			Widget& m_widget;
 		};
 	}

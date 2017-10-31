@@ -21,6 +21,7 @@ namespace hen
 
 			void open(GuiLayer layer = GuiLayer::NORMAL_PRIORITY);
 			void close();
+			void load(const std::string& filepath);
 
 			script::Script& getScript();
 

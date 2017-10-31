@@ -29,7 +29,6 @@ namespace hen
 			void processChildren(float dt);
 			void processSlider(float dt);
 
-			void renderChildren(const glm::vec2& offset, float dt) const;
 			void renderBar(const glm::vec2& offset, float dt) const;
 			void renderSlider(const glm::vec2& offset, float dt) const;
 

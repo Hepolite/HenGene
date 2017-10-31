@@ -7,12 +7,6 @@ hen::gui::Widget::Widget(const std::string& name, Widget* parent)
 	m_family.setParent(parent);
 	if (parent != nullptr)
 		parent->m_family.addChild(this);
-
-	setRender([this](const glm::vec2& pos, float dt)
-	{
-		for (auto& child : m_family.getChildren())
-			child->onRender(pos, dt);
-	});
 }
 
 void hen::gui::Widget::onProcess(float dt)
@@ -28,8 +22,12 @@ void hen::gui::Widget::onProcess(float dt)
 }
 void hen::gui::Widget::onRender(const glm::vec2& pos, float dt) const
 {
-	if (m_render != nullptr && m_visible)
+	if (!m_visible)
+		return;
+	if (m_render != nullptr)
 		m_render(pos, dt);
+	for (auto& child : m_family.getChildren())
+		child->onRender(pos, dt);
 }
 
 bool hen::gui::Widget::isVisible() const

@@ -7,6 +7,7 @@
 #include <allegro5/allegro_font.h>
 #include <glm/vec2.hpp>
 
+#include <optional>
 #include <string>
 
 namespace hen
@@ -28,8 +29,8 @@ namespace hen
 			inline std::string getText() const { return m_text; }
 			inline Align getAlign() const { return m_align; }
 			inline glm::vec2 getSize() const { return m_size; }
-			inline float getMaxWidth() const { return m_fontSizeData.x; }
-			inline float getLineHeight() const { return m_fontSizeData.y; }
+			inline std::optional<float> getMaxWidth() const { if (m_fontSizeData.x <= 0.0f) return {}; return m_fontSizeData.x; }
+			inline std::optional<float> getLineHeight() const { if (m_fontSizeData.y <= 0.0f) return {}; m_fontSizeData.y; }
 
 			void render(const glm::vec2& pos) const;
 
@@ -40,7 +41,7 @@ namespace hen
 			std::string m_text;
 			Align m_align = Align::LEFT;
 
-			glm::vec2 m_fontSizeData{ 1000000.0f, 0.0f };
+			glm::vec2 m_fontSizeData{ 0.0f, 0.0f };
 			glm::vec2 m_size;
 			glm::ivec2 m_offset;
 		};

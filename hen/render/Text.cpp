@@ -57,7 +57,7 @@ void hen::render::Text::recalculateSizeAndOffset()
 
 	reset();
 	ALLEGRO_USTR* ustr = al_ustr_new(m_text.c_str());
-	al_do_multiline_ustr(m_font, m_fontSizeData.x, ustr, &callback, (void*)m_font);
+	al_do_multiline_ustr(m_font, getMaxWidth().value_or(1000000.0f), ustr, &callback, (void*)m_font);
 	al_ustr_free(ustr);
 
 	m_size.x = textSize.x;
@@ -68,12 +68,14 @@ void hen::render::Text::recalculateSizeAndOffset()
 void hen::render::Text::render(const glm::vec2& pos) const
 {
 	const ALLEGRO_COLOR color{ 1.0f, 1.0f, 1.0f, 1.0f };
+	const auto width = getMaxWidth().value_or(1000000.0f);
+	const auto align = m_align == Align::CENTER ? 0.5f * width : m_align == Align::RIGHT ? width : 0.0f;
 
 	if (m_font != nullptr)
 		al_draw_multiline_text(
 			m_font, color,
-			pos.x - m_offset.x, pos.y - m_offset.y,
-			m_fontSizeData.x, m_fontSizeData.y,
+			pos.x - m_offset.x + align, pos.y - m_offset.y,
+			width, m_fontSizeData.y,
 			ALLEGRO_ALIGN_INTEGER | m_align,
 			m_text.c_str()
 		);

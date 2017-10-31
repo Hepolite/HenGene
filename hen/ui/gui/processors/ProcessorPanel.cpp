@@ -7,7 +7,6 @@
 void hen::gui::ProcessorPanel::operator()(const glm::vec2& offset, float dt) const
 {
 	renderBackground(offset, dt);
-	renderChildren(offset, dt);
 }
 
 void hen::gui::ProcessorPanel::renderBackground(const glm::vec2& offset, float dt) const
@@ -36,9 +35,4 @@ void hen::gui::ProcessorPanel::renderBackground(const glm::vec2& offset, float d
 	background->render(6, pos.x, posCorner.y, sizeCorner.x, sizeCorner.y);
 	background->render(7, posCenter.x, posCorner.y, sizeCenter.x, sizeCorner.y);
 	background->render(8, posCorner.x, posCorner.y, sizeCorner.x, sizeCorner.y);
-}
-void hen::gui::ProcessorPanel::renderChildren(const glm::vec2& offset, float dt) const
-{
-	for (auto& child : m_widget.m_family.getChildren())
-		child->onRender(offset, dt);
 }

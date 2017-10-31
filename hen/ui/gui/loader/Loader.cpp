@@ -10,6 +10,7 @@
 #include "hen/ui/gui/loader/LoaderLabel.h"
 #include "hen/ui/gui/loader/LoaderPanel.h"
 #include "hen/ui/gui/loader/LoaderSlider.h"
+#include "hen/ui/gui/loader/LoaderTextbox.h"
 #include "hen/ui/gui/loader/LoaderTextfield.h"
 #include "hen/ui/gui/loader/LoaderWindow.h"
 #include "hen/ui/Display.h"
@@ -40,6 +41,8 @@ void hen::gui::Loader::load(const pugi::xml_node& node, const std::string& type)
 		LoaderPanel{ m_widget }.load(node);
 	else if (type == TYPE_RADIO)
 		LoaderButtonRadio{ m_widget }.load(node);
+	else if (type == TYPE_TEXTBOX)
+		LoaderTextbox{ m_widget }.load(node);
 	else if (type == TYPE_TEXTFIELD)
 		LoaderTextfield{}.load(m_widget, node);
 	else if (type == TYPE_SLIDER)
