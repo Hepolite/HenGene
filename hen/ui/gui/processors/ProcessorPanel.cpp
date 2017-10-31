@@ -1,8 +1,8 @@
 
 #include "hen/ui/gui/processors/ProcessorPanel.h"
 
+#include "hen/ui/gui/internal/Constants.h"
 #include "hen/util/MathLib.h"
-#include "hen/ui/gui/Constants.h"
 
 void hen::gui::ProcessorPanel::operator()(const glm::vec2& offset, float dt) const
 {

@@ -15,7 +15,7 @@ namespace hen
 		class ScriptHelper
 		{
 		public:
-			ScriptHelper(Script& script) : m_script(&script) {}
+			ScriptHelper(Script& script) : m_script(script) {}
 			ScriptHelper(const ScriptHelper&) = delete;
 			ScriptHelper(ScriptHelper&&) = delete;
 			~ScriptHelper() = default;
@@ -29,54 +29,54 @@ namespace hen
 			template<typename T>
 			inline void addType(const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::user_type<T>(), name);
+				m_script.getHandle().add(chaiscript::user_type<T>(), name);
 			}
 			template<typename Parent, typename Child>
 			inline void addRelation()
 			{
-				m_script->getHandle().add(chaiscript::base_class<Parent, Child>());
+				m_script.getHandle().add(chaiscript::base_class<Parent, Child>());
 			}
 
 			template<typename T>
 			inline void addVariable(T&& variable, const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::var(variable), name);
+				m_script.getHandle().add(chaiscript::var(variable), name);
 			}
 			template<typename T>
 			inline void addGlobalVariable(T&& variable, const std::string& name)
 			{
-				m_script->getHandle().add_global(chaiscript::var(variable), name);
+				m_script.getHandle().add_global(chaiscript::var(variable), name);
 			}
 			template<typename T>
 			inline void addConstGlobalVariable(const T& variable, const std::string& name)
 			{
-				m_script->getHandle().add_global_const(chaiscript::const_var(variable), name);
+				m_script.getHandle().add_global_const(chaiscript::const_var(variable), name);
 			}
 			template<typename T>
 			inline void addAttribute(T&& attribute, const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::fun(attribute), name);
+				m_script.getHandle().add(chaiscript::fun(attribute), name);
 			}
 
 			template<typename Ret, typename ...Param>
 			inline void addFunction(Ret(*function)(Param...), const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::fun(function), name);
+				m_script.getHandle().add(chaiscript::fun(function), name);
 			}
 			template<typename Ret, typename Class, typename ...Param>
 			inline void addFunction(Ret(Class::*function)(Param...), const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::fun(function), name);
+				m_script.getHandle().add(chaiscript::fun(function), name);
 			}
 			template<typename Ret, typename Class, typename ...Param>
 			inline void addFunction(Ret(Class::*function)(Param...) const, const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::fun(function), name);
+				m_script.getHandle().add(chaiscript::fun(function), name);
 			}
 			template<typename T>
 			inline void addConstructor(const std::string& name)
 			{
-				m_script->getHandle().add(chaiscript::constructor<T>(), name);
+				m_script.getHandle().add(chaiscript::constructor<T>(), name);
 			}
 
 			template<typename Enum>
@@ -84,7 +84,7 @@ namespace hen
 			{
 				chaiscript::ModulePtr ptr = std::make_shared<chaiscript::Module>();
 				chaiscript::utility::add_class<math::Axis>(*ptr, name, pairs);
-				m_script->getHandle().add(ptr);
+				m_script.getHandle().add(ptr);
 			}
 
 
@@ -93,10 +93,12 @@ namespace hen
 			{
 				try
 				{
-					return m_script->getHandle().eval<std::function<Ret(Param...)>>(name);
+					return m_script.getHandle().eval<std::function<Ret(Param...)>>(name);
 				}
-				catch (const std::exception&)
+				catch (const std::exception& e)
 				{
+					warn("Unable to obtain function " + name);
+					warn(e.what());
 					return [](Param...) -> Ret {};
 				}
 			}
@@ -105,7 +107,7 @@ namespace hen
 			{
 				try
 				{
-					return m_script->getHandle().eval<T>(expression);
+					return m_script.getHandle().eval<T>(expression);
 				}
 				catch (const std::exception&)
 				{
@@ -133,8 +135,8 @@ namespace hen
 				}
 				return false;
 			}
-			inline bool executeScript(const std::string& script) const { return m_script->executeScript(script); }
-			inline bool executeFile(const io::File& file) const { return m_script->executeFile(file); }
+			inline bool executeScript(const std::string& script) const { return m_script.executeScript(script); }
+			inline bool executeFile(const io::File& file) const { return m_script.executeFile(file); }
 
 		private:
 			void info(const std::string& msg) const;
@@ -142,7 +144,7 @@ namespace hen
 
 			static std::vector<std::function<void(ScriptHelper&)>> m_scriptData;
 
-			Script* m_script;
+			Script& m_script;
 		};
 	}
 }

@@ -2,7 +2,7 @@
 #include "hen/ui/gui/loader/LoaderTextfield.h"
 
 #include "hen/core/Core.h"
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/gui/loader/LoaderButton.h"
 #include "hen/ui/Keyboard.h"
 

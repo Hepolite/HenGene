@@ -17,9 +17,11 @@ void hen::gui::GuiManager::initialize()
 
 void hen::gui::GuiManager::process(float dt)
 {
+	processLayer(GuiLayer::HIGHEST_PRIORITY, dt);
 	processLayer(GuiLayer::HIGH_PRIORITY, dt);
 	processLayer(GuiLayer::NORMAL_PRIORITY, dt);
 	processLayer(GuiLayer::LOW_PRIORITY, dt);
+	processLayer(GuiLayer::LOWEST_PRIORITY, dt);
 }
 void hen::gui::GuiManager::processLayer(GuiLayer layer, float dt)
 {
@@ -27,13 +29,15 @@ void hen::gui::GuiManager::processLayer(GuiLayer layer, float dt)
 	if (it == m_guis.end())
 		return;
 	for (auto& gui : it->second)
-		gui->onProcess(dt);
+		gui->process(dt);
 }
 void hen::gui::GuiManager::render(float dt) const
 {
+	renderLayer(GuiLayer::LOWEST_PRIORITY, dt);
 	renderLayer(GuiLayer::LOW_PRIORITY, dt);
 	renderLayer(GuiLayer::NORMAL_PRIORITY, dt);
 	renderLayer(GuiLayer::HIGH_PRIORITY, dt);
+	renderLayer(GuiLayer::HIGHEST_PRIORITY, dt);
 }
 
 void hen::gui::GuiManager::renderLayer(GuiLayer layer, float dt) const
@@ -42,26 +46,30 @@ void hen::gui::GuiManager::renderLayer(GuiLayer layer, float dt) const
 	if (it == m_guis.end())
 		return;
 	for (const auto& gui : it->second)
-		gui->onRender(dt);
+		gui->render(dt);
 }
 
-void hen::gui::GuiManager::add(Gui* gui, GuiLayer layer)
+hen::gui::GuiBase* hen::gui::GuiManager::open(GuiLayer layer)
 {
-	if (gui != nullptr)
-		m_guis[layer].push_back(gui);
+	auto gui = std::make_unique<GuiBase>(layer);
+	const auto ptr = gui.get();
+	m_guis[layer].push_back(std::move(gui));
+	return ptr;
 }
-void hen::gui::GuiManager::remove(Gui* gui, GuiLayer layer)
+void hen::gui::GuiManager::close(GuiBase* gui)
 {
 	if (gui == nullptr)
 		return;
-	auto& map = m_guis[layer];
+	auto& map = m_guis[gui->getLayer()];
 	for (auto it = map.begin(); it != map.end(); ++it)
 	{
-		if (*it == gui)
+		if (it->get() == gui)
 		{
 			std::swap(*it, map.back());
 			map.pop_back();
 			return;
 		}
 	}
+	if (map.empty())
+		m_guis.erase(gui->getLayer());
 }

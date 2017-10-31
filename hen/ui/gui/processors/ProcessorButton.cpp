@@ -2,8 +2,8 @@
 #include "hen/ui/gui/processors/ProcessorButton.h"
 
 #include "hen/core/Core.h"
-#include "hen/ui/gui/Constants.h"
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/internal/Constants.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/Mouse.h"
 
 namespace

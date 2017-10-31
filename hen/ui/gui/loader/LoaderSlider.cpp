@@ -1,9 +1,9 @@
 
 #include "hen/ui/gui/loader/LoaderSlider.h"
 
-#include "hen/ui/gui/Constants.h"
-#include "hen/ui/gui/GuiResources.h"
 #include "hen/ui/gui/loader/LoaderButton.h"
+#include "hen/ui/gui/internal/Constants.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/gui/processors/ProcessorSlider.h"
 #include "hen/util/MathLib.h"
 #include "hen/util/StringLib.h"

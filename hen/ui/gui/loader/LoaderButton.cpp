@@ -4,7 +4,7 @@
 #include "hen/core/Core.h"
 #include "hen/event/EventBus.h"
 #include "hen/event/events/Mouse.h"
-#include "hen/ui/gui/Constants.h"
+#include "hen/ui/gui/internal/Constants.h"
 #include "hen/ui/gui/processors/ProcessorButton.h"
 
 void hen::gui::LoaderButton::load(const pugi::xml_node& node)

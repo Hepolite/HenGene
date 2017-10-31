@@ -1,7 +1,7 @@
 
 #include "hen/ui/gui/processors/ProcessorLabel.h"
 
-#include "hen/ui/gui/Constants.h"
+#include "hen/ui/gui/internal/Constants.h"
 #include "hen/render/Text.h"
 
 void hen::gui::ProcessorLabel::operator()(const glm::vec2& offset, float dt) const

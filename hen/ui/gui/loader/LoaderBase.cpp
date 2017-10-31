@@ -1,8 +1,8 @@
 
 #include "hen/ui/gui/loader/LoaderBase.h"
 
-#include "hen/ui/gui/Constants.h"
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/internal/Constants.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/gui/loader/Loader.h"
 #include "hen/util/StringLib.h"
 

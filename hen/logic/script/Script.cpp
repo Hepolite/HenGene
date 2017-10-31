@@ -5,7 +5,7 @@
 #include "hen/io/File.h"
 #include "hen/logic/script/ScriptHelper.h"
 #include "hen/logic/state/StateManager.h"
-#include "hen/ui/gui/Gui.h"
+#include "hen/ui/gui/internal/GuiBase.h"
 #include "hen/ui/gui/Widget.h"
 #include "hen/util/MathEnum.h"
 
@@ -93,7 +93,8 @@ void hen::script::Script::registerDefaultFunctionality()
 	helper.addFunction(&state::StateManager::removeState, "removeState");
 
 	// Gui
-	helper.addFunction(&gui::Gui::getWidget, "getWidget");
+	helper.addFunction(&gui::GuiBase::hasWidget, "hasWidget");
+	helper.addFunction(&gui::GuiBase::getWidget, "getWidget");
 
 	helper.addAttribute(&gui::Widget::m_clickable, "clickable");
 	helper.addFunction(&gui::Widget::setVisible, "setVisible");

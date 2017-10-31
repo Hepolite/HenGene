@@ -1,12 +1,12 @@
 
 #pragma once
 
-#include "hen/ui/gui/Gui.h"
-#include "hen/ui/gui/GuiHandle.h"
-#include "hen/ui/gui/GuiLayer.h"
+#include "hen/ui/gui/internal/GuiBase.h"
+#include "hen/ui/gui/internal/GuiLayer.h"
 #include "hen/render/Renderer.h"
 
-#include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace hen
 {
@@ -14,7 +14,8 @@ namespace hen
 	{
 		class GuiManager
 		{
-			using GuiList = std::vector<Gui*>;
+			using GuiPtr = std::unique_ptr<GuiBase>;
+			using GuiList = std::vector<GuiPtr>;
 
 		public:
 			GuiManager();
@@ -22,16 +23,15 @@ namespace hen
 			GuiManager(GuiManager&&) = delete;
 			~GuiManager();
 
-			void initialize();
-
 			GuiManager& operator=(const GuiManager&) = delete;
 			GuiManager& operator=(GuiManager&&) = delete;
 
+			void initialize();
 			void process(float dt);
 			void render(float dt) const;
 
-			void add(Gui* gui, GuiLayer layer = GuiLayer::NORMAL_PRIORITY);
-			void remove(Gui* gui, GuiLayer layer = GuiLayer::NORMAL_PRIORITY);
+			GuiBase* open(GuiLayer layer = GuiLayer::NORMAL_PRIORITY);
+			void close(GuiBase* gui);
 
 			bool isMouseOverGui() const;
 

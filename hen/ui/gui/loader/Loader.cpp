@@ -2,9 +2,9 @@
 #include "hen/ui/gui/loader/Loader.h"
 
 #include "hen/core/Core.h"
-#include "hen/ui/gui/Constants.h"
-#include "hen/ui/gui/Gui.h"
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/internal/Constants.h"
+#include "hen/ui/gui/internal/GuiBase.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/gui/loader/LoaderBase.h"
 #include "hen/ui/gui/loader/LoaderButton.h"
 #include "hen/ui/gui/loader/LoaderLabel.h"
@@ -16,7 +16,7 @@
 
 #include <Log.h>
 
-hen::gui::Loader::Loader(Gui& gui)
+hen::gui::Loader::Loader(GuiBase& gui)
 	: m_widget(gui.getResources().createWidget("", nullptr))
 {
 	const auto& display = hen::Core::getDisplay();

@@ -1,7 +1,7 @@
 
 #include "hen/ui/gui/loader/LoaderWindow.h"
 
-#include "hen/ui/gui/GuiResources.h"
+#include "hen/ui/gui/internal/GuiResources.h"
 #include "hen/ui/gui/loader/LoaderSlider.h"
 #include "hen/util/MathLib.h"
 

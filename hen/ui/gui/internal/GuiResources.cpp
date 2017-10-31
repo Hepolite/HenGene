@@ -1,7 +1,5 @@
 
-#include "hen/ui/gui/GuiResources.h"
-
-#include <Log.h>
+#include "hen/ui/gui/internal/GuiResources.h"
 
 hen::gui::Widget& hen::gui::GuiResources::createWidget(const std::string& name, Widget* parent)
 {
