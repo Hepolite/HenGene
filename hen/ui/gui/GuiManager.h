@@ -7,6 +7,8 @@
 
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace hen
 {
@@ -39,7 +41,12 @@ namespace hen
 			void processLayer(GuiLayer layer, float dt);
 			void renderLayer(GuiLayer layer, float dt) const;
 
+			void openGuis();
+			void closeGuis();
+
 			std::unordered_map<GuiLayer, GuiList> m_guis;
+			std::unordered_set<GuiBase*> m_guisToClose;
+			std::vector<GuiPtr> m_guisToOpen;
 
 			render::Renderer m_renderer;
 		};

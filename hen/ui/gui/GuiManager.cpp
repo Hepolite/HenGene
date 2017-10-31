@@ -17,11 +17,13 @@ void hen::gui::GuiManager::initialize()
 
 void hen::gui::GuiManager::process(float dt)
 {
+	openGuis();
 	processLayer(GuiLayer::HIGHEST_PRIORITY, dt);
 	processLayer(GuiLayer::HIGH_PRIORITY, dt);
 	processLayer(GuiLayer::NORMAL_PRIORITY, dt);
 	processLayer(GuiLayer::LOW_PRIORITY, dt);
 	processLayer(GuiLayer::LOWEST_PRIORITY, dt);
+	closeGuis();
 }
 void hen::gui::GuiManager::processLayer(GuiLayer layer, float dt)
 {
@@ -51,25 +53,36 @@ void hen::gui::GuiManager::renderLayer(GuiLayer layer, float dt) const
 
 hen::gui::GuiBase* hen::gui::GuiManager::open(GuiLayer layer)
 {
-	auto gui = std::make_unique<GuiBase>(layer);
-	const auto ptr = gui.get();
-	m_guis[layer].push_back(std::move(gui));
-	return ptr;
+	m_guisToOpen.emplace_back(std::make_unique<GuiBase>(layer));
+	return m_guisToOpen.back().get();
+}
+void hen::gui::GuiManager::openGuis()
+{
+	for (auto& gui : m_guisToOpen)
+		m_guis[gui->getLayer()].emplace_back(std::move(gui));
+	m_guisToOpen.clear();
 }
 void hen::gui::GuiManager::close(GuiBase* gui)
 {
-	if (gui == nullptr)
-		return;
-	auto& map = m_guis[gui->getLayer()];
-	for (auto it = map.begin(); it != map.end(); ++it)
+	if (gui != nullptr)
+		m_guisToClose.insert(gui);
+}
+void hen::gui::GuiManager::closeGuis()
+{
+	for (auto gui : m_guisToClose)
 	{
-		if (it->get() == gui)
+		auto& map = m_guis[gui->getLayer()];
+		for (auto it = map.begin(); it != map.end(); ++it)
 		{
-			std::swap(*it, map.back());
-			map.pop_back();
-			return;
+			if (it->get() == gui)
+			{
+				std::swap(*it, map.back());
+				map.pop_back();
+				break;
+			}
 		}
+		if (map.empty())
+			m_guis.erase(gui->getLayer());
 	}
-	if (map.empty())
-		m_guis.erase(gui->getLayer());
+	m_guisToClose.clear();
 }

@@ -23,10 +23,8 @@ namespace hen
 			void close();
 			void load(const std::string& filepath);
 
-			script::Script& getScript();
-
-		protected:
 			inline GuiBase* getHandle() const { return m_handle; }
+			script::Script& getScript();
 
 		private:
 			GuiBase* m_handle = nullptr;
