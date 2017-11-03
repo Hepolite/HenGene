@@ -3,7 +3,7 @@
 
 #include "hen/ui/gui/Widget.h"
 
-#include "extern/pugixml/pugixml.hpp"
+#include <extern/pugixml/pugixml.hpp>
 
 namespace hen
 {

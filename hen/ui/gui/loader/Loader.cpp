@@ -44,7 +44,7 @@ void hen::gui::Loader::load(const pugi::xml_node& node, const std::string& type)
 	else if (type == TYPE_TEXTBOX)
 		LoaderTextbox{ m_widget }.load(node);
 	else if (type == TYPE_TEXTFIELD)
-		LoaderTextfield{}.load(m_widget, node);
+		LoaderTextfield{ m_widget }.load(node);
 	else if (type == TYPE_SLIDER)
 		LoaderSlider{ m_widget }.load(node);
 	else if (type == TYPE_WINDOW)

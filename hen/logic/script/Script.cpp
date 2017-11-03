@@ -110,6 +110,9 @@ void hen::script::Script::registerDefaultFunctionality()
 	helper.addConstructor<glm::ivec3(glm::ivec3)>("ivec3");
 	helper.addConstructor<glm::ivec3(glm::ivec2, int)>("ivec3");
 	helper.addConstructor<glm::ivec3(int, int, int)>("ivec3");
+	helper.addAttribute(&glm::ivec3::x, "x");
+	helper.addAttribute(&glm::ivec3::y, "y");
+	helper.addAttribute(&glm::ivec3::z, "z");
 
 	helper.addType<glm::ivec4>("ivec4");
 	helper.addConstructor<glm::ivec4()>("ivec4");
@@ -118,6 +121,10 @@ void hen::script::Script::registerDefaultFunctionality()
 	helper.addConstructor<glm::ivec4(glm::ivec2, int, int)>("ivec4");
 	helper.addConstructor<glm::ivec4(glm::ivec2, glm::ivec2)>("ivec4");
 	helper.addConstructor<glm::ivec4(int, int, int, int)>("ivec4");
+	helper.addAttribute(&glm::ivec4::x, "x");
+	helper.addAttribute(&glm::ivec4::y, "y");
+	helper.addAttribute(&glm::ivec4::z, "z");
+	helper.addAttribute(&glm::ivec4::w, "w");
 
 	helper.addEnum<math::Axis>("Axis", {
 		{ math::Axis::X, "AXIS_X" },
