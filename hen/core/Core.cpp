@@ -7,6 +7,7 @@
 #include "hen/event/EventBus.h"
 #include "hen/event/EventQueue.h"
 #include "hen/logic/Loop.h"
+#include "hen/logic/script/ScriptData.h"
 #include "hen/logic/state/StateManager.h"
 #include "hen/render/allegro/Font.h"
 #include "hen/render/allegro/Sprite.h"
@@ -100,6 +101,11 @@ hen::Core::Core(const core::Settings& settings)
 	LOG_INFO << "Registering GUI logic...";
 	m_internal->m_guiManager.initialize();
 	LOG_INFO << "Done setting up GUI logic...";
+
+	LOG_INFO << "Registering core scripting...";
+	script::ScriptData data;
+	data.setup();
+	LOG_INFO << "Done setting up core scripting...";
 
 	LOG_INFO << "Finished setting up core resources!";
 }

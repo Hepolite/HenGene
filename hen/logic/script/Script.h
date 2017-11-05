@@ -4,6 +4,7 @@
 #include "hen/io/File.h"
 
 #include <functional>
+#include <memory>
 #include <string>
 
 namespace chaiscript
@@ -38,10 +39,8 @@ namespace hen
 			std::string getString(const std::string& expression, const std::string& def = "") const;
 
 		private:
-			void registerDefaultFunctionality();
-
 			class Internal;
-			Internal* m_internal = nullptr;
+			std::unique_ptr<Internal> m_internal;
 		};
 	}
 }

@@ -1,15 +1,8 @@
 
 #include "hen/logic/script/Script.h"
 
-#include "hen/core/Core.h"
-#include "hen/io/File.h"
 #include "hen/logic/script/ScriptHelper.h"
-#include "hen/logic/state/StateManager.h"
-#include "hen/ui/gui/internal/GuiBase.h"
-#include "hen/ui/gui/Widget.h"
-#include "hen/util/MathEnum.h"
 
-#include <glm/glm.hpp>
 #include <Log.h>
 
 #include <iostream>
@@ -31,10 +24,6 @@ namespace hen
 				return def;
 			}
 		}
-
-		inline void debug(const std::string& msg) { LOG_DEBUG << msg; }
-		inline void info(const std::string& msg) { LOG_INFO << msg; }
-		inline void warn(const std::string& msg) { LOG_WARNING << msg; }
 
 		std::string parse(const std::string& path)
 		{
@@ -65,77 +54,14 @@ public:
 
 hen::script::Script::Script()
 {
-	m_internal = new Internal;
-	registerDefaultFunctionality();
+	m_internal = std::make_unique<Internal>();
+	ScriptHelper{ *this }.applyScriptData();
 }
-hen::script::Script::~Script()
-{
-	delete m_internal;
-}
+hen::script::Script::~Script() {}
 
 chaiscript::ChaiScript& hen::script::Script::getHandle()
 {
 	return m_internal->m_handle;
-}
-
-void hen::script::Script::registerDefaultFunctionality()
-{
-	ScriptHelper helper{ *this };
-	helper.applyScriptData();
-
-	// Core
-	helper.addFunction(&Core::stop, "terminate");
-
-	// State manager
-	helper.addGlobalVariable(&Core::getStateManager(), "StateManager");
-	helper.addFunction(&state::StateManager::addState, "addState");
-	helper.addFunction(&state::StateManager::setState, "setState");
-	helper.addFunction(&state::StateManager::removeState, "removeState");
-
-	// Gui
-	helper.addFunction(&gui::GuiBase::hasWidget, "hasWidget");
-	helper.addFunction(&gui::GuiBase::getWidget, "getWidget");
-
-	helper.addAttribute(&gui::Widget::m_clickable, "clickable");
-	helper.addFunction(&gui::Widget::setVisible, "setVisible");
-	helper.addFunction(&gui::Widget::isVisible, "isVisible");
-	helper.addFunction(&gui::Widget::click, "click");
-
-	helper.addFunction(&gui::ComponentClickable::isLocked, "isLocked");
-	helper.addFunction(&gui::ComponentClickable::setLocked, "setLocked");
-
-	// Math utility
-	helper.addType<glm::ivec3>("ivec3");
-	helper.addConstructor<glm::ivec3()>("ivec3");
-	helper.addConstructor<glm::ivec3(glm::ivec3)>("ivec3");
-	helper.addConstructor<glm::ivec3(glm::ivec2, int)>("ivec3");
-	helper.addConstructor<glm::ivec3(int, int, int)>("ivec3");
-	helper.addAttribute(&glm::ivec3::x, "x");
-	helper.addAttribute(&glm::ivec3::y, "y");
-	helper.addAttribute(&glm::ivec3::z, "z");
-
-	helper.addType<glm::ivec4>("ivec4");
-	helper.addConstructor<glm::ivec4()>("ivec4");
-	helper.addConstructor<glm::ivec4(glm::ivec4)>("ivec4");
-	helper.addConstructor<glm::ivec4(glm::ivec3, int)>("ivec4");
-	helper.addConstructor<glm::ivec4(glm::ivec2, int, int)>("ivec4");
-	helper.addConstructor<glm::ivec4(glm::ivec2, glm::ivec2)>("ivec4");
-	helper.addConstructor<glm::ivec4(int, int, int, int)>("ivec4");
-	helper.addAttribute(&glm::ivec4::x, "x");
-	helper.addAttribute(&glm::ivec4::y, "y");
-	helper.addAttribute(&glm::ivec4::z, "z");
-	helper.addAttribute(&glm::ivec4::w, "w");
-
-	helper.addEnum<math::Axis>("Axis", {
-		{ math::Axis::X, "AXIS_X" },
-		{ math::Axis::Y, "AXIS_Y" },
-		{ math::Axis::Z, "AXIS_Z" }
-	});
-
-	// Logging
-	helper.addFunction(&info, "LOG_INFO");
-	helper.addFunction(&warn, "LOG_WARN");
-	helper.addFunction(&debug, "LOG_DEBUG");
 }
 
 bool hen::script::Script::executeScript(const std::string& script) const
