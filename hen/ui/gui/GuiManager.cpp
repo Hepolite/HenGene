@@ -2,16 +2,22 @@
 #include "hen/ui/gui/GuiManager.h"
 
 #include "hen/core/Core.h"
+#include "hen/event/EventBus.h"
+#include "hen/event/events/Display.h"
 #include "hen/render/RenderCore.h"
 
 hen::gui::GuiManager::GuiManager() {}
 hen::gui::GuiManager::~GuiManager()
 {
+	Core::getEventBus().unregisterListener(m_listener);
 	Core::getRenderCore().deleteRenderer(m_renderer);
 }
 
 void hen::gui::GuiManager::initialize()
 {
+	m_listener = Core::getEventBus().registerCallback<events::DisplayResize>(
+		[this](const events::DisplayResize& event) { onResizeScreen(event.getWidth(), event.getHeight()); }
+	);
 	m_renderer = Core::getRenderCore().addRenderer(render::RenderLayer::SCREEN, [this](float dt) { render(dt); });
 }
 
@@ -85,4 +91,17 @@ void hen::gui::GuiManager::closeGuis()
 			m_guis.erase(gui->getLayer());
 	}
 	m_guisToClose.clear();
+}
+
+void hen::gui::GuiManager::onResizeScreen(int width, int height)
+{
+	const glm::vec2 size{ width, height };
+
+	for (auto& list : m_guis)
+	for (auto& gui : list.second)
+	{
+		auto& widget = gui->getWidget();
+		widget.m_size.setMaxSize(size);
+		widget.m_size.setMinSize(size);
+	}
 }

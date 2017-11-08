@@ -8,6 +8,7 @@
 #include "hen/event/events/Keyboard.h"
 #include "hen/event/events/Mouse.h"
 
+#include <allegro5/display.h>
 #include <Log.h>
 
 hen::event::EventQueue::EventQueue()
@@ -33,6 +34,8 @@ void hen::event::EventQueue::process() const
 			bus.post(events::DisplayClose{});
 			break;
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
+			al_acknowledge_resize(event.display.source);
+			bus.post(events::DisplayResize{ event.display.width, event.display.height });
 			break;
 
 		case ALLEGRO_EVENT_KEY_DOWN:

@@ -1,9 +1,10 @@
 
 #pragma once
 
+#include "hen/event/Listener.h"
+#include "hen/render/Renderer.h"
 #include "hen/ui/gui/internal/GuiBase.h"
 #include "hen/ui/gui/internal/GuiLayer.h"
-#include "hen/render/Renderer.h"
 
 #include <memory>
 #include <unordered_map>
@@ -44,10 +45,13 @@ namespace hen
 			void openGuis();
 			void closeGuis();
 
+			void onResizeScreen(int width, int height);
+
 			std::unordered_map<GuiLayer, GuiList> m_guis;
 			std::unordered_set<GuiBase*> m_guisToClose;
 			std::vector<GuiPtr> m_guisToOpen;
 
+			event::Listener m_listener;
 			render::Renderer m_renderer;
 		};
 	}

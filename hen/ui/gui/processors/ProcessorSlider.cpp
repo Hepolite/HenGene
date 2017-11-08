@@ -7,6 +7,7 @@
 #include "hen/ui/Mouse.h"
 #include "hen/util/MathLib.h"
 
+#include <Log.h>
 
 namespace
 {
