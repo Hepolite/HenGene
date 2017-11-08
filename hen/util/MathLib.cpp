@@ -18,6 +18,7 @@ glm::vec2 hen::math::toSpherical(const glm::vec3& direction)
 {
 	glm::vec2 rot;
 	rot.x = std::atan2(direction.y, direction.x) * 180.0f / PI;
+	rot.x = rot.x < 0.0f ? rot.x + 360.0f : rot.x;
 	rot.y = 90.0f - getAngle(glm::vec3(0.0f, 0.0f, 1.0f), direction);
 	return rot;
 }
