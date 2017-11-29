@@ -242,22 +242,6 @@ namespace hen
 		inline constexpr T lengthSquared(const glm::tvec4<T>& v) { return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w; }
 
 
-		/* Returns the angle between the two vectors, A = arccos(v1*v2 / |v1||v2|) */
-		float getAngle(glm::vec3 v1, glm::vec3 v2);
-
-		/* Converts a direction to a cartesian form */
-		glm::vec3 toCartesian(float yaw, float pitch);
-		/* Converts a direction on the form (yaw, pitch) to a cartesian form */
-		inline glm::vec3 toCartesian(const glm::vec2& rotation) { return toCartesian(rotation.x, rotation.y); }
-		/* Converts a direction on the form (yaw, pitch, roll) to a cartesian form */
-		inline glm::vec3 toCartesian(const glm::vec3& rotation) { return toCartesian(rotation.x, rotation.y); }
-
-		/* Converts a vector on the form x, y, z to the spherical form (yaw, pitch) */
-		glm::vec2 toSpherical(const glm::vec3& vector);
-		/* Converts a vector on the form x, y, z to the spherical form (yaw, pitch) */
-		inline glm::vec2 toSpherical(float x, float y, float z) { return toSpherical(glm::vec3(x, y, z)); }
-
-
 
 		/* Finds the smallest number t such that s + t*ds is an integer */
 		template<typename T>
@@ -280,5 +264,22 @@ namespace hen
 		{
 			return glm::vec4{ intbound(s.x, ds.x), intbound(s.y, ds.y), intbound(s.z, ds.z), intbound(s.w, ds.w) };
 		}
+
+
+
+		/* Returns the angle between the two vectors, A = arccos(v1*v2 / |v1||v2|) */
+		float getAngle(glm::vec3 v1, glm::vec3 v2);
+
+		/* Converts a direction to a cartesian form */
+		glm::vec3 toCartesian(float yaw, float pitch);
+		/* Converts a direction on the form (yaw, pitch) to a cartesian form */
+		inline glm::vec3 toCartesian(const glm::vec2& rotation) { return toCartesian(rotation.x, rotation.y); }
+		/* Converts a direction on the form (yaw, pitch, roll) to a cartesian form */
+		inline glm::vec3 toCartesian(const glm::vec3& rotation) { return toCartesian(rotation.x, rotation.y); }
+
+		/* Converts a vector on the form x, y, z to the spherical form (yaw, pitch) */
+		glm::vec2 toSpherical(const glm::vec3& vector);
+		/* Converts a vector on the form x, y, z to the spherical form (yaw, pitch) */
+		inline glm::vec2 toSpherical(float x, float y, float z) { return toSpherical(glm::vec3(x, y, z)); }
 	}
 }
